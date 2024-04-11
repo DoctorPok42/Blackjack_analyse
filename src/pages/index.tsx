@@ -17,16 +17,36 @@ export default function Home() {
         <Case icon={faFile} title="Total Games" value="2935" />
 
         <div className="charts">
-          <Graph title="Win rate by initial hand" data={[
-            {
-              value: 0.5,
-              label: "Win rate",
+          <Graph
+            title="Win rate by initial hand"
+            data={[{
+              label: 'PRODUCT A',
+              value: [44, 15, 41, 67, 22, 43]
             }, {
-              value: 0.5,
-              label: "Loss rate",
-            }
-          ]} size="medium" />
-          <Graph title="Win rate by initial hand" data={[]} size="medium" />
+              label: 'PRODUCT B',
+              value: [55, 23, 20, 8, 13, 27]
+            }, {
+              label: 'PRODUCT C',
+              value: [41, 17, 15, 15, 21, 14]
+            }]}
+            size="medium"
+            color={["#543de0", "#61b7e1", "#c2cbdd"]}
+          />
+          <Graph
+            title="Win rate by initial hand"
+            data={[{
+              label: 'PRODUCT A',
+              value: [44, 15, 41, 67, 22, 43]
+            }, {
+              label: 'PRODUCT B',
+              value: [55, 23, 20, 8, 13, 27]
+            }, {
+              label: 'PRODUCT C',
+              value: [41, 17, 15, 15, 21, 14]
+            }]}
+            size="medium"
+            color={["#543de0", "#61b7e1", "#c2cbdd"]}
+          />
           <Graph title="Player Win Rate" value="0.5" data={[]} size="small" />
           <Graph title="Daily Traffic" value="2.579" data={[]} size="small" />
         </div>
