@@ -1,8 +1,37 @@
 import Head from "next/head";
 import { Case, Graph } from "../../components";
 import { faFile } from '@fortawesome/free-solid-svg-icons';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import useSWR from "swr";
+
+const fetcher = (url: string) => axios.get(url).then((res) => res.data)
+
+type Stats = {
+  total_games: number;
+  total_loss_rate: number;
+  total_losses: number;
+  total_push_rate: number;
+  total_pushes: number;
+  total_win_rate: number;
+  total_wins: number;
+}
 
 export default function Home() {
+
+  const [stats, setStats] = useState<Stats>({} as Stats)
+  const Titles = ["Total Games", "Total Wins", "Total Losses", "Total Pushes", "Total Win Rate", "Total Loss Rate", "Total Push Rate"]
+
+  const { data, error } = useSWR("http://127.0.0.1:5000/total_games", fetcher)
+  useEffect(() => {
+    if (data) {
+      setStats(data.total_games)
+    }
+  }, [data])
+  if (!data) return <div>Loading...</div>
+  if (error) return <div>Error...</div>
+
+
   return (
     <>
       <Head>
@@ -14,7 +43,15 @@ export default function Home() {
       <main className="container">
         <h1 className="title">Blackjack Analyzer</h1>
 
-        <Case icon={faFile} title="Total Games" value="2935" />
+        <div className="stats">
+          {
+            Object.keys(stats).map((key, index) => {
+              return (
+                <Case key={index} icon={faFile} title={Titles[index]} value={stats[key as keyof Stats].toString()} />
+              )
+            })
+          }
+        </div>
 
         <div className="charts">
           <Graph

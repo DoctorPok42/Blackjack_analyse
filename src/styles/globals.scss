@@ -60,3 +60,9 @@ h6 {
     gap: 1em;
   }
 }
+
+.stats {
+  display: flex;
+  flex-direction: row;
+  gap: 1em;
+}
