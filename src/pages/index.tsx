@@ -1,9 +1,10 @@
 import Head from "next/head";
 import { Case, Graph } from "../../components";
-import { faFile, faTrophy, faWineBottle, faHeartCrack, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from "react";
+import { faFile,faWineBottle, faHeartCrack, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+// import { useState, useEffect } from "react";
 import axios from "axios";
 import useSWR from "swr";
+import { getInfosHand } from "@/Functions/Hands";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data)
 
@@ -33,16 +34,14 @@ type GameData = {
 
 export default function Home() {
 
-  // const [stats, setStats] = useState<Stats>({} as Stats)
-  const Titles = ["Total Games", "Total Wins", "Total Losses", "Total Pushes", "Total Win Rate", "Total Loss Rate", "Total Push Rate"]
-  const Icons = [faFile, faTrophy, faHeartCrack, faRightFromBracket, faWineBottle, faHeartCrack, faRightFromBracket]
+
+  const Titles = ["Total Games", "Total Loss Rate", "Total Losses", "Total Push Rate", "Total Pushes", "Total Win Rate", "Total Wins"]
+  const Icons = [faFile, faHeartCrack, faHeartCrack, faRightFromBracket, faRightFromBracket, faWineBottle, faWineBottle]
 
   const { data: stats, error } = useSWR("http://127.0.0.1:5000/total_games", fetcher)
   const { data: games, error: errGame } = useSWR("http://127.0.0.1:5000/best_choice", fetcher)
   if (!stats || !games) return <div>Loading...</div>
   if (error) return <div>Error...</div>
-  console.log(games)
-
 
   return (
     <>
@@ -50,7 +49,6 @@ export default function Home() {
         <title>Blackjack Analyzer</title>
         <meta name="description" content="Blackjack Analyzer" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        {/* <link rel="icon" href="/favicon.ico" /> */}
       </Head>
       <main className="container">
         <h1 className="title">Blackjack Analyzer</h1>
@@ -79,7 +77,7 @@ export default function Home() {
               {
                 games.best_choice.map((game: GameData, index: number) => {
                   return (
-                    <tr key={index}>
+                    <tr key={index} onMouseEnter={() => getInfosHand(game.PlayerCard1, game.PlayerCard2, game.DealerHand)}>
                       <td>{index + 1}</td>
                       <td>
                         <td>{game.PlayerCard1}</td>
