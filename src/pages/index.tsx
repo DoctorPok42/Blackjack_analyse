@@ -9,7 +9,7 @@ import config from "@/../config.json";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data)
 
-export default function Home(props: { api: string }) {
+export default function Home(props: Readonly<{ api: string }>) {
   const Icons = [faFile, faHeartCrack, faHeartCrack, faRightFromBracket, faRightFromBracket, faWineBottle, faWineBottle]
 
   const { data: stats, error } = useSWR(`${props.api}/total_games`, fetcher)
