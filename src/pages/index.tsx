@@ -1,45 +1,19 @@
 import Head from "next/head";
-import { Case, Graph } from "../../components";
+import { Case } from "../../components";
 import { faFile,faWineBottle, faHeartCrack, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
-// import { useState, useEffect } from "react";
 import axios from "axios";
 import useSWR from "swr";
-import { getInfosHand } from "@/Functions/Hands";
+import getInfosHand from "@/functions/Hands";
+import { GameData, Stats } from "@/types/types";
+import config from "@/../config.json";
 
 const fetcher = (url: string) => axios.get(url).then((res) => res.data)
 
-type Stats = {
-  total_games: number;
-  total_loss_rate: number;
-  total_losses: number;
-  total_push_rate: number;
-  total_pushes: number;
-  total_win_rate: number;
-  total_wins: number;
-}
-
-type GameData = {
-  DealerHand: string;
-  LossRate: number;
-  Lost: string;
-  PlayerCard1: string;
-  PlayerCard2: string;
-  PlayerChoices: string;
-  Push: string;
-  PushRate: number;
-  Total: string;
-  Win: string;
-  WinRate: number;
-}
-
-export default function Home() {
-
-
-  const Titles = ["Total Games", "Total Loss Rate", "Total Losses", "Total Push Rate", "Total Pushes", "Total Win Rate", "Total Wins"]
+export default function Home(props: { api: string }) {
   const Icons = [faFile, faHeartCrack, faHeartCrack, faRightFromBracket, faRightFromBracket, faWineBottle, faWineBottle]
 
-  const { data: stats, error } = useSWR("http://127.0.0.1:5000/total_games", fetcher)
-  const { data: games, error: errGame } = useSWR("http://127.0.0.1:5000/best_choice", fetcher)
+  const { data: stats, error } = useSWR(`${props.api}/total_games`, fetcher)
+  const { data: games, error: errGame } = useSWR(`${props.api}/best_choice`, fetcher)
   if (!stats || !games) return <div>Loading...</div>
   if (error) return <div>Error...</div>
 
@@ -57,7 +31,7 @@ export default function Home() {
           {
             Object.keys(stats.total_games).map((key, index) => {
               return (
-                <Case key={index} icon={Icons[index]} title={Titles[index]} value={stats.total_games[key as keyof Stats].toString()} />
+                <Case key={index + key} icon={Icons[index]} title={config.titles[index]} value={stats.total_games[key as keyof Stats].toString()} />
               )
             })
           }
@@ -77,7 +51,7 @@ export default function Home() {
               {
                 games.best_choice.map((game: GameData, index: number) => {
                   return (
-                    <tr key={index} onMouseEnter={() => getInfosHand(game.PlayerCard1, game.PlayerCard2, game.DealerHand)}>
+                    <tr key={index} onMouseEnter={() => getInfosHand(game.PlayerCard1, game.PlayerCard2, game.DealerHand, props.api)}>
                       <td>{index + 1}</td>
                       <td>
                         <td>{game.PlayerCard1}</td>
@@ -129,4 +103,14 @@ export default function Home() {
       </main>
     </>
   );
+}
+
+export const getServerSideProps = async () => {
+  const api = process.env.API_URL;
+
+  return {
+    props: {
+      api,
+    },
+  };
 }
