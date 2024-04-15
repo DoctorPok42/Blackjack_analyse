@@ -15,7 +15,7 @@ export default function Home(props: { api: string }) {
   const { data: stats, error } = useSWR(`${props.api}/total_games`, fetcher)
   const { data: games, error: errGame } = useSWR(`${props.api}/best_choice`, fetcher)
   if (!stats || !games) return <div>Loading...</div>
-  if (error) return <div>Error...</div>
+  if (error || errGame) return <div>Error...</div>
 
   return (
     <>
@@ -51,7 +51,7 @@ export default function Home(props: { api: string }) {
               {
                 games.best_choice.map((game: GameData, index: number) => {
                   return (
-                    <tr key={index} onMouseEnter={() => getInfosHand(game.PlayerCard1, game.PlayerCard2, game.DealerHand, props.api)}>
+                    <tr key={game.LossRate+game.Lost} onMouseEnter={() => getInfosHand(game.PlayerCard1, game.PlayerCard2, game.DealerHand, props.api)}>
                       <td>{index + 1}</td>
                       <td>
                         <td>{game.PlayerCard1}</td>
