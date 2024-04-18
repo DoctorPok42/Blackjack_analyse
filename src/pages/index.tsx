@@ -1,5 +1,5 @@
 import Head from "next/head";
-import { Case } from "../../components";
+import { Case } from "@/components";
 import { faFile,faWineBottle, faHeartCrack, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import axios from "axios";
 import useSWR from "swr";
