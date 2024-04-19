@@ -13,6 +13,14 @@
   --color-white: #fff;
   --color-black: #000;
 
+  --green: #00c39a;
+  --red: #ff3d71;
+  --blue: #00a8ff;
+  --yellow: #ffcc29;
+  --purple: #8a3ab9;
+  --orange: #ff9f43;
+  --cyan: #00d8d6;
+
   --font: "Nunito", sans-serif;
 
   --transition: all 0.2 ease-in-out;
@@ -62,6 +70,10 @@ h6 {
 }
 
 .stats {
+  width: 70%;
+  margin: 0 auto;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 1em;
 }
